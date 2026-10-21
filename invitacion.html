@@ -21,6 +21,34 @@
   <title>Eloisa y Jaime · Invitación</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- El Apps Script tarda ~3 s: abrir la conexión y pedir los datos del invitado lo antes posible -->
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+  <script>
+    // fetch con límite de tiempo y reintentos (sólo para errores de red / tiempo agotado)
+    window.fetchJSON = async function (url, options, cfg) {
+      cfg = cfg || {};
+      var timeout = cfg.timeout || 20000, retries = cfg.retries == null ? 1 : cfg.retries;
+      for (var attempt = 0; ; attempt++) {
+        var ctrl = new AbortController(), timer = setTimeout(function () { ctrl.abort(); }, timeout);
+        try {
+          var res = await fetch(url, Object.assign({}, options, { signal: ctrl.signal }));
+          return await res.json();
+        } catch (e) {
+          if (attempt >= retries) throw e.name === "AbortError" ? new Error("La conexión tardó demasiado. Intenta de nuevo.") : e;
+          await new Promise(function (r) { setTimeout(r, 800 * (attempt + 1)); });
+        } finally { clearTimeout(timer); }
+      }
+    };
+    // Empieza a pedir los datos del invitado mientras se descarga el resto de la página
+    (function () {
+      var api = "__RSVP_API_URL__", i = (new URLSearchParams(location.search).get("i") || "").trim();
+      if (/^https:\/\//.test(api) && i) {
+        window.earlyInvite = { token: i, promise: fetchJSON(api + "?action=invite&i=" + encodeURIComponent(i), {}, { retries: 2 }) };
+        window.earlyInvite.promise.catch(function () {}); // se maneja después
+      }
+    })();
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Cutive&family=Italianno&family=Sacramento&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -492,6 +520,13 @@
       <div class="card airmail">
         <h2>Confirma tu asistencia</h2>
 
+        <!-- Mientras llegan los datos del invitado (la invitación ya se ve) -->
+        <div id="rsvp-loading" hidden>
+          <p class="caps" style="font-size:.8rem">Cargando tu invitación…</p>
+          <p class="error" id="load-error" hidden></p>
+          <div class="actions" id="retry-box" hidden style="margin-top:1rem"><button class="btn" type="button" id="retry-btn">Reintentar</button></div>
+        </div>
+
         <!-- Formulario -->
         <form id="rsvp-form" novalidate>
           <fieldset>
@@ -649,20 +684,24 @@
 
     const apiBackend = {
       async getInvite(token) {
-        const res = await fetch(`${CONFIG.apiUrl}?action=invite&i=${encodeURIComponent(token)}`);
-        const json = await res.json();
+        // La primera vez usa la petición que ya salió desde el <head>
+        const early = window.earlyInvite;
+        window.earlyInvite = null;
+        const json = early && early.token === token
+          ? await early.promise
+          : await fetchJSON(`${CONFIG.apiUrl}?action=invite&i=${encodeURIComponent(token)}`, {}, { retries: 2 });
         if (json.error === "not_found") return null;
         if (!json.ok) throw new Error(json.message || "No se pudo cargar la invitación.");
         return json;
       },
       async sendRSVP(token, data) {
         // text/plain evita la petición previa de CORS que Apps Script no responde
-        const res = await fetch(CONFIG.apiUrl, {
+        // Sin reintento automático: si falla, bindForm revisa la hoja antes de mostrar error
+        const json = await fetchJSON(CONFIG.apiUrl, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({ action: "rsvp", token, ...data }),
-        });
-        const json = await res.json();
+        }, { retries: 0, timeout: 25000 });
         if (!json.ok) throw new Error(json.message || "No se pudo guardar tu respuesta. Intenta de nuevo.");
         return json;
       },
@@ -898,10 +937,28 @@
           show("panel"); bindPanel(); renderPanel();
           return;
         }
-        const data = await backend.getInvite(token);
-        if (!data) { show("not-found"); return; }
-        renderInvite(data.guest, data.deadline);
-        bindForm(token);
+        // La invitación se muestra de inmediato; el nombre y el formulario aparecen cuando responde la hoja
+        $("#rsvp-form").hidden = true;
+        $("#rsvp-result").hidden = true;
+        $("#rsvp-loading").hidden = false;
+        show("invite");
+        let bound = false;
+        const load = async () => {
+          $("#load-error").hidden = true; $("#retry-box").hidden = true;
+          try {
+            const data = await backend.getInvite(token);
+            if (!data) { show("not-found"); return; }
+            $("#rsvp-loading").hidden = true;
+            renderInvite(data.guest, data.deadline);
+            if (!bound) { bindForm(token); bound = true; }
+          } catch (ex) {
+            console.error("Invitación:", ex);
+            $("#load-error").textContent = USE_API ? "No pudimos cargar tu invitación. Revisa tu conexión." : "No se pudo cargar dev/invitados.csv (usa node dev/servidor.mjs).";
+            $("#load-error").hidden = false; $("#retry-box").hidden = false;
+          }
+        };
+        $("#retry-btn").addEventListener("click", load);
+        await load();
       } catch (e) {
         $("#loading").innerHTML = USE_API
           ? `<div><p class="caps">No se pudo cargar la invitación</p><p style="font-size:.8rem;margin-top:.6rem">Revisa tu conexión e intenta de nuevo.</p></div>`
