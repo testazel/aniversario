@@ -85,28 +85,15 @@
       gap: clamp(2rem, 5vw, 4rem); align-items: center;
     }
     .hero-text { text-align: center; color: var(--olive); }
-    /* Edwardian Script ITC ships with Windows/Office; other devices fall back to Sacramento */
-    @font-face {
-      font-family: "Edwardian Script";
-      src: local("Edwardian Script ITC"), local("EdwardianScriptITC");
-    }
+    .hero-ring { display: flex; justify-content: center; grid-column: 2; grid-row: 2; }
+    .hero-ring + .hero-text { grid-column: 1; grid-row: 2; }
     .hero-text .caps {
-      font-family: "Edwardian Script", var(--script);
-      font-weight: 700; font-size: clamp(1.9rem, 1.6rem + 1vw, 2.5rem);
+      font-family: var(--script);
+      font-size: clamp(2rem, 1.6rem + 1.4vw, 2.8rem);
       line-height: 1.1; text-transform: none; letter-spacing: 0;
-      color: var(--ink);
-    }
-    /* Jimmy Script is not on Google Fonts: place your licensed files in fonts/ */
-    @font-face {
-      font-family: "Jimmy Script";
-      src: url("fonts/JimmyScript.woff2") format("woff2"),
-           url("fonts/JimmyScript.woff") format("woff"),
-           url("fonts/JimmyScript.otf") format("opentype"),
-           url("fonts/JimmyScript.ttf") format("truetype");
-      font-display: swap;
     }
     .names {
-      font-family: "Jimmy Script", var(--script);
+      font-family: var(--script);
       font-size: clamp(4.2rem, 3rem + 6vw, 7.5rem); margin: 1.2rem 0;
     }
     .names span { display: block; }
@@ -124,15 +111,18 @@
     .family .polaroid { --r: 1.5deg; --ar: 4 / 3; width: min(560px, 100%); }
     .family figcaption { font-size: clamp(2.9rem, 2.2rem + 2.6vw, 4.4rem); }
 
-    .history {
-      display: grid; grid-template-columns: 1fr auto 1.1fr;
-      gap: clamp(1.5rem, 4vw, 3rem); align-items: center;
-      margin-top: clamp(4rem, 9vw, 7rem);
-    }
-    .history .polaroid { --r: -2deg; --ar: 4 / 3; width: 100%; max-width: 340px; }
     .ring { width: clamp(110px, 14vw, 170px); filter: drop-shadow(0 4px 6px rgba(40, 40, 20, .25)); }
-    .history h2 { font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem); margin-bottom: 1rem; }
-    .history p { max-width: 34ch; }
+
+    /* ---------- STORY ---------- */
+    .story { text-align: center; color: var(--cream); padding-bottom: clamp(7rem, 12vw, 9rem); }
+    .story .container {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 4rem); align-items: center; justify-items: center;
+    }
+    .story .polaroid { --r: 2deg; --ar: 4 / 3; width: min(480px, 100%); }
+    .story figcaption { font-size: clamp(2.9rem, 2.2rem + 2.6vw, 4.4rem); }
+    .story h2 { font-size: clamp(2.4rem, 1.7rem + 2.6vw, 3.6rem); margin-bottom: 1rem; }
+    .story p { max-width: 40ch; margin: 0 auto; font-size: clamp(.95rem, .85rem + .4vw, 1.15rem); }
 
     /* ---------- Torn paper edge ---------- */
     .torn { position: absolute; left: 0; width: 100%; height: 90px; display: block; z-index: 3; pointer-events: none; }
@@ -150,8 +140,8 @@
     .stamp svg { width: 70%; }
 
     /* ---------- BLESSING ---------- */
-    .blessing { text-align: center; padding-bottom: 0; }
-    .blessing h2 { font-size: clamp(2.6rem, 1.8rem + 3vw, 4.2rem); color: var(--olive); margin-bottom: clamp(1.8rem, 4vw, 3rem); }
+    .blessing { text-align: center; margin-top: clamp(3rem, 7vw, 5rem); }
+    .blessing h2 { font-size: clamp(2.6rem, 1.8rem + 3vw, 4.2rem); margin-bottom: clamp(1.8rem, 4vw, 3rem); }
     .blessing p { max-width: 46ch; margin: 0 auto; font-size: clamp(.95rem, .85rem + .4vw, 1.15rem); }
     .hearts { display: block; width: clamp(64px, 8vw, 84px); margin: clamp(1.2rem, 3vw, 1.8rem) auto; }
 
@@ -159,10 +149,11 @@
     .vows { text-align: center; }
     .vows h2 { font-size: clamp(2.6rem, 1.8rem + 3vw, 4.2rem); color: var(--olive); margin-bottom: clamp(2.5rem, 5vw, 4rem); }
     .vows-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
+      display: grid; grid-template-columns: 1fr auto 1fr;
       gap: clamp(1.5rem, 4vw, 3rem); align-items: center;
       max-width: 1000px; margin: 0 auto;
     }
+    .envelope-art { width: clamp(90px, 11vw, 130px); justify-self: center; transform: rotate(-4deg); filter: drop-shadow(0 4px 6px rgba(40, 40, 20, .18)); }
     .vows h3 { font-weight: 400; font-size: clamp(1rem, .9rem + .4vw, 1.2rem); letter-spacing: .08em; margin-bottom: .6rem; }
     .vows p { font-size: .8rem; }
     .dress { margin-top: 2.5rem; }
@@ -213,11 +204,10 @@
     /* ---------- Responsive ---------- */
     @media (max-width: 780px) {
       .hero .container,
+      .story .container,
       .agenda .container { grid-template-columns: 1fr; }
       .hero-photo { max-width: 340px; margin-top: 1rem; }
-      .history { grid-template-columns: 1fr; justify-items: center; text-align: center; }
-      .history p { margin: 0 auto; }
-      .ring { order: -1; }
+      .hero-ring, .hero-ring + .hero-text { grid-column: auto; grid-row: auto; }
       .vows-grid { grid-template-columns: 1fr; }
       .agenda .head { display: flex; align-items: center; justify-content: space-between; }
       .flower-c { margin-top: 0; width: 90px; }
@@ -238,9 +228,9 @@
       <g id="leaf"><path d="M0 0 C 12 -10, 30 -10, 42 0 C 30 10, 12 10, 0 0 Z"/></g>
       <g id="heart"><path d="M0 9 C -14 0, -12 -13, 0 -6 C 12 -13, 14 0, 0 9 Z"/></g>
       <g id="hearts">
-        <use href="#heart" transform="translate(-24 2) rotate(-14) scale(.6)" fill="#9c9440"/>
-        <use href="#heart" fill="#c3b54e" stroke="#9c9440" stroke-width="1"/>
-        <use href="#heart" transform="translate(24 2) rotate(14) scale(.6)" fill="#616c35"/>
+        <use href="#heart" transform="translate(-24 2) rotate(-14) scale(.6)" fill="#616c35"/>
+        <use href="#heart" fill="#fffdf6" stroke="#616c35" stroke-width="1"/>
+        <use href="#heart" transform="translate(24 2) rotate(14) scale(.6)" fill="#4f5a2a"/>
       </g>
     </defs>
   </svg>
@@ -249,39 +239,22 @@
   <section class="hero paper">
     <div class="container">
       <div class="hero-text">
-        <p class="caps">Te invitamos a Celebrar nuestro 35 Aniversario Matrimonial</p>
-        <br>
-        <p class="caps">El 18 de Diciembre 2026</p>
-
+        <p class="caps">Persona, te invitamos</p>
         <br>
         <h1 class="names script">
           <span>Eloisa</span><span class="y">y</span><span>Jaime</span>
         </h1>
+        
       </div>
       <div class="hero-photo">
         <div class="envelope airmail"></div>
         <figure class="polaroid">
           <div class="photo"><img src="imagenes/1.jpg" alt="Eloisa y Jaime" onerror="this.remove()"></div>
-          <figcaption>35 Años Juntos</figcaption>
+          <!--<figcaption>35 Años Juntos</figcaption> -->
         </figure>
+        
       </div>
-    </div>
-  </section>
-
-  <!-- FAMILY + HISTORY -->
-  <section class="mustard" style="padding-bottom: clamp(7rem, 12vw, 9rem);">
-    <div class="container">
-      <div class="family">
-        <figure class="polaroid tape">
-          <div class="photo"><img src="imagenes/2.jpeg" alt="Eloisa y Jaime con su familia" loading="lazy" onerror="this.remove()"></div>
-          <figcaption>Nuestra familia</figcaption>
-        </figure>
-      </div>
-
-      <div class="history">
-        <figure class="polaroid">
-          <div class="photo"><img src="imagenes/4.jpg" alt="Boda de Eloisa y Jaime en 1991" loading="lazy" onerror="this.remove()"></div>
-        </figure>
+      <div class="hero-ring">
         <svg class="ring" viewBox="-62 -46 124 92" aria-hidden="true">
           <defs>
             <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
@@ -304,14 +277,35 @@
           <use href="#band" transform="translate(14 8) rotate(14)"/>
           <g clip-path="url(#ring-cross)"><use href="#band" transform="translate(-14 -6) rotate(-18)"/></g>
         </svg>
-        <div>
-          <h2 class="script">Celebrando otro<br>aniversario juntos</h2>
-          <p>Acompáñanos a la celebración de esta historia que comenzó en 1991 y sigue hasta nuestros días.</p>
-        </div>
+      </div>
+      <div class="hero-text">
+        <p class="caps">a celebrar nuestro 35 Aniversario Matrimonial</p>
+        <p class="caps">El 18 de Diciembre 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAMILY + BLESSING -->
+  <section class="mustard" style="padding-bottom: clamp(7rem, 12vw, 9rem);">
+    <div class="container">
+      <div class="family">
+        <figure class="polaroid tape">
+          <div class="photo"><img src="imagenes/4.jpg" alt="Eloisa y Jaime con su familia" loading="lazy" onerror="this.remove()"></div>
+          <figcaption></figcaption>
+        </figure>
+      </div>
+
+      <div class="blessing">
+        <h2 class="script">Celebramos 35 años de Matrimonio</h2>
+        <p>Pero lo que más celebramos es que un día entendimos que nuestro matrimonio no necesitaba ser perfecto.</p>
+        <svg class="hearts" viewBox="-36 -14 72 26" aria-hidden="true"><use href="#hearts"/></svg>
+        <p>Necesitaba poner a Dios en el centro.</p>
+        <svg class="hearts" viewBox="-36 -14 72 26" aria-hidden="true"><use href="#hearts"/></svg>
+        <p>Y ese ha sido la mayor bendición de nuestra historia.</p>
       </div>
     </div>
 
-    <svg class="torn bottom" data-fill="#ece6da" aria-hidden="true"></svg>
+    <svg class="torn bottom" data-fill="#616c35" aria-hidden="true"></svg>
     <div class="stamps">
       <div class="stamp" style="--r:-6deg"><div style="--bg:var(--green)">
         <svg viewBox="-30 -30 60 60"><g fill="#e8c934"><use href="#petal" transform="scale(.6)"/><use href="#petal" transform="rotate(72) scale(.6)"/><use href="#petal" transform="rotate(144) scale(.6)"/><use href="#petal" transform="rotate(216) scale(.6)"/><use href="#petal" transform="rotate(288) scale(.6)"/></g></svg>
@@ -322,16 +316,19 @@
     </div>
   </section>
 
-  <!-- BLESSING -->
-  <section class="blessing paper">
+  <!-- STORY -->
+  <section class="story green">
     <div class="container">
-      <h2 class="script">Celebramos 35 años de Matrimonio</h2>
-      <p>Pero lo que más celebramos es que un día entendimos que nuestro matrimonio no necesitaba ser perfecto.</p>
-      <svg class="hearts" viewBox="-36 -14 72 26" aria-hidden="true"><use href="#hearts"/></svg>
-      <p>Necesitaba poner a Dios en el centro.</p>
-      <svg class="hearts" viewBox="-36 -14 72 26" aria-hidden="true"><use href="#hearts"/></svg>
-      <p>Y ese ha sido la mayor bendición de nuestra historia.</p>
+      <div class="story-text">
+        <h2 class="script">Celebrando otro<br>aniversario juntos</h2>
+        <p>Acompáñanos a la celebración de esta historia que comenzó en 1991 y sigue cultivando amor y felicidad.</p>
+      </div>
+      <figure class="polaroid tape">
+        <div class="photo"><img src="imagenes/2.jpeg" alt="Eloisa y Jaime con su familia" loading="lazy" onerror="this.remove()"></div>
+         <!--<figcaption>Nuestra familia</figcaption>-->
+      </figure>
     </div>
+    <svg class="torn bottom" data-fill="#ece6da" aria-hidden="true"></svg>
   </section>
 
   <!-- VOWS -->
@@ -344,6 +341,15 @@
           <h4>En Ranchito del Rey y María Madre</h4>
           <p>A las 19:30 hrs. Dirección: Av. Dr. José Narro Robles 4995, Saltillo, Coahuila.</p>
         </div>
+        <svg class="envelope-art" viewBox="0 0 120 84" aria-hidden="true">
+          <g stroke="#616c35" stroke-width="2" stroke-linejoin="round">
+            <rect x="4" y="4" width="112" height="76" rx="4" fill="#fbf6dc"/>
+            <path d="M4 80 L48 44 M116 80 L72 44" fill="none" stroke-width="1.5"/>
+            <path d="M4 6 L60 50 L116 6" fill="#f3e9c0"/>
+          </g>
+          <path d="M10 76 h100" stroke="#c3b54e" stroke-width="1.5" stroke-dasharray="6 5"/>
+          <use href="#heart" transform="translate(60 48) scale(.9)" fill="#c3b54e" stroke="#9c9440" stroke-width="1.2"/>
+        </svg>
         <div>
           <h3>RECEPCIÓN</h3>
           <h4>Salón El Nogal.</h4>
