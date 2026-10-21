@@ -92,6 +92,7 @@
       font-size: clamp(2rem, 1.6rem + 1.4vw, 2.8rem);
       line-height: 1.1; text-transform: none; letter-spacing: 0;
     }
+    .hero-text .date { font-family: "Italianno", var(--script); font-size: clamp(2.2rem, 1.8rem + 1.4vw, 3rem); line-height: 1; }
     .names {
       font-family: var(--script);
       font-size: clamp(4.2rem, 3rem + 6vw, 7.5rem); margin: 1.2rem 0;
@@ -149,11 +150,11 @@
     .vows { text-align: center; }
     .vows h2 { font-size: clamp(2.6rem, 1.8rem + 3vw, 4.2rem); color: var(--olive); margin-bottom: clamp(2.5rem, 5vw, 4rem); }
     .vows-grid {
-      display: grid; grid-template-columns: 1fr auto 1fr;
-      gap: clamp(1.5rem, 4vw, 3rem); align-items: center;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(1.5rem, 4vw, 3rem); align-items: start;
       max-width: 1000px; margin: 0 auto;
     }
-    .envelope-art { width: clamp(90px, 11vw, 130px); justify-self: center; transform: rotate(-4deg); filter: drop-shadow(0 4px 6px rgba(40, 40, 20, .18)); }
+    .envelope-art { display: block; width: clamp(90px, 11vw, 130px); margin: 1.4rem auto 0; transform: rotate(-4deg); filter: drop-shadow(0 4px 6px rgba(40, 40, 20, .18)); }
     .vows h3 { font-weight: 400; font-size: clamp(1rem, .9rem + .4vw, 1.2rem); letter-spacing: .08em; margin-bottom: .6rem; }
     .vows p { font-size: .8rem; }
     .dress { margin-top: 2.5rem; }
@@ -280,7 +281,9 @@
       </div>
       <div class="hero-text">
         <p class="caps">a celebrar nuestro 35 Aniversario Matrimonial</p>
-        <p class="caps">El 18 de Diciembre 2026</p>
+        <br>
+        <p class="caps date">Fecha:</p>
+        <p class="caps date">El 18 de Diciembre 2026</p>
       </div>
     </div>
   </section>
@@ -341,19 +344,19 @@
           <h4>En Ranchito del Rey y María Madre</h4>
           <p>A las 19:30 hrs. Dirección: Av. Dr. José Narro Robles 4995, Saltillo, Coahuila.</p>
         </div>
-        <svg class="envelope-art" viewBox="0 0 120 84" aria-hidden="true">
-          <g stroke="#616c35" stroke-width="2" stroke-linejoin="round">
-            <rect x="4" y="4" width="112" height="76" rx="4" fill="#fbf6dc"/>
-            <path d="M4 80 L48 44 M116 80 L72 44" fill="none" stroke-width="1.5"/>
-            <path d="M4 6 L60 50 L116 6" fill="#f3e9c0"/>
-          </g>
-          <path d="M10 76 h100" stroke="#c3b54e" stroke-width="1.5" stroke-dasharray="6 5"/>
-          <use href="#heart" transform="translate(60 48) scale(.9)" fill="#c3b54e" stroke="#9c9440" stroke-width="1.2"/>
-        </svg>
         <div>
           <h3>RECEPCIÓN</h3>
           <h4>Salón El Nogal.</h4>
           <p>A las 20:30 hrs. Dirección: Blvd. Eulalio Gutiérrez 1695 esq. El Rosario Saltillo, Coahuila. </p>
+          <svg class="envelope-art" viewBox="0 0 120 84" aria-hidden="true">
+            <g stroke="#616c35" stroke-width="2" stroke-linejoin="round">
+              <rect x="4" y="4" width="112" height="76" rx="4" fill="#fbf6dc"/>
+              <path d="M4 80 L48 44 M116 80 L72 44" fill="none" stroke-width="1.5"/>
+              <path d="M4 6 L60 50 L116 6" fill="#f3e9c0"/>
+            </g>
+            <path d="M10 76 h100" stroke="#c3b54e" stroke-width="1.5" stroke-dasharray="6 5"/>
+            <use href="#heart" transform="translate(60 48) scale(.9)" fill="#c3b54e" stroke="#9c9440" stroke-width="1.2"/>
+          </svg>
         </div>
       </div>
       <div class="dress">
