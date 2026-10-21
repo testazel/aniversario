@@ -31,6 +31,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      # La URL del Apps Script no está en el repo: se toma del secreto RSVP_API_URL
+      # (Settings → Secrets and variables → Actions) y se escribe en los .html al publicar.
+      - name: Insert RSVP API URL
+        env:
+          RSVP_API_URL: ${{ secrets.RSVP_API_URL }}
+        run: |
+          if [ -z "$RSVP_API_URL" ]; then echo "::error::Falta el secreto RSVP_API_URL"; exit 1; fi
+          for f in *.html; do sed -i "s#__RSVP_API_URL__#${RSVP_API_URL}#g" "$f"; done
+          grep -l "__RSVP_API_URL__" *.html && { echo "::error::Quedó __RSVP_API_URL__ sin reemplazar"; exit 1; } || true
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
