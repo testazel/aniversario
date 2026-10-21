@@ -1,0 +1,15 @@
+# Notas y valores locales (URL del script, etc.)
+.env
+
+# Lista real de invitados: nunca subir al repo público
+invitados.xlsx
+invitados-import.csv
+*.xlsx
+~$*
+
+# Herramientas de desarrollo local (no se publican)
+dev/invitados.csv
+dev/servidor.mjs
+dev/generar-invitados.mjs
+dev/apps-script/
+.claude/
