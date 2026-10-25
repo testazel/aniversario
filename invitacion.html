@@ -93,17 +93,21 @@
     /* ---------- Polaroid ---------- */
     .polaroid {
       background: #f7f5ef;
-      padding: 4% 4% 14%;
+      padding: 4% 4% 0;
       box-shadow: 0 10px 24px rgba(40, 40, 20, .25);
       transform: rotate(var(--r, 0deg));
       position: relative;
+      container-type: inline-size;
     }
+    .polaroid:not(:has(figcaption)) { padding-bottom: 14%; }
     .polaroid .photo { aspect-ratio: var(--ar, 1 / 1); background: #8d8658; overflow: hidden; }
+    /* Caption fills the frame's bottom band and scales with the frame width */
     .polaroid figcaption {
-      position: absolute; left: 0; right: 0; bottom: 3.5%;
-      text-align: center; color: #6d6a3a;
+      display: flex; align-items: center; justify-content: center;
+      height: 18.5cqw; padding-top: 1cqw;
+      color: #6d6a3a; white-space: nowrap;
       font-family: "Italianno", var(--script);
-      font-size: clamp(2.2rem, 1.7rem + 1.8vw, 3.2rem); line-height: 1;
+      font-size: 12.1cqw; font-weight: 700; line-height: 1;
     }
     .tape::before {
       content: ""; position: absolute; top: -18px; left: 50%;
@@ -153,7 +157,6 @@
     /* ---------- FAMILY / HISTORY ---------- */
     .family { display: grid; justify-items: center; }
     .family .polaroid { --r: 1.5deg; --ar: 4 / 3; width: min(560px, 100%); }
-    .family figcaption { font-size: clamp(2.9rem, 2.2rem + 2.6vw, 4.4rem); }
 
     .ring { width: clamp(110px, 14vw, 170px); filter: drop-shadow(0 4px 6px rgba(40, 40, 20, .25)); }
 
@@ -164,7 +167,6 @@
       gap: clamp(2rem, 5vw, 4rem); align-items: center; justify-items: center;
     }
     .story .polaroid { --r: 2deg; --ar: 4 / 3; width: min(480px, 100%); }
-    .story figcaption { font-size: clamp(2.9rem, 2.2rem + 2.6vw, 4.4rem); }
     .story h2 { font-size: clamp(2.4rem, 1.7rem + 2.6vw, 3.6rem); margin-bottom: 1rem; }
     .story p { max-width: 40ch; margin: 0 auto; font-size: clamp(.95rem, .85rem + .4vw, 1.15rem); }
 
@@ -392,7 +394,7 @@
           <div class="envelope airmail"></div>
           <figure class="polaroid">
             <div class="photo"><img src="imagenes/1.jpg" alt="Eloisa y Jaime" onerror="this.remove()"></div>
-            <!--<figcaption>35 Años Juntos</figcaption> -->
+            <figcaption>Nuestro Aniversario</figcaption> 
           </figure>
           
         </div>
@@ -436,7 +438,7 @@
         <div class="family">
           <figure class="polaroid tape">
             <div class="photo"><img src="imagenes/4.jpg" alt="Eloisa y Jaime con su familia" loading="lazy" onerror="this.remove()"></div>
-            <figcaption></figcaption>
+            <figcaption>Diciembre 1991</figcaption>
           </figure>
         </div>
 
@@ -470,7 +472,7 @@
         </div>
         <figure class="polaroid tape">
           <div class="photo"><img src="imagenes/2.jpeg" alt="Eloisa y Jaime con su familia" loading="lazy" onerror="this.remove()"></div>
-           <!--<figcaption>Nuestra familia</figcaption>-->
+           <figcaption>Nuestra Familia</figcaption>
         </figure>
       </div>
       <svg class="torn bottom" data-fill="#ece6da" aria-hidden="true"></svg>
