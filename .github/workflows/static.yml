@@ -31,22 +31,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # La URL del Apps Script no está en el repo: se toma del secreto RSVP_API_URL
-      # (Settings → Secrets and variables → Actions) y se escribe en los .html al publicar.
-      - name: Insert RSVP API URL
+      # Igual que Cloudflare Pages: build.sh copia sólo lo público a public/ y rellena los marcadores.
+      # La URL del Apps Script viene del secreto RSVP_API_URL (Settings → Secrets and variables → Actions).
+      - name: Build
         env:
           RSVP_API_URL: ${{ secrets.RSVP_API_URL }}
-        run: |
-          if [ -z "$RSVP_API_URL" ]; then echo "::error::Falta el secreto RSVP_API_URL"; exit 1; fi
-          for f in *.html; do sed -i "s#__RSVP_API_URL__#${RSVP_API_URL}#g" "$f"; done
-          grep -l "__RSVP_API_URL__" *.html && { echo "::error::Quedó __RSVP_API_URL__ sin reemplazar"; exit 1; } || true
+          SITE_ORIGIN: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: bash build.sh
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: 'public'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

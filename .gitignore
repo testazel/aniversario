@@ -13,3 +13,6 @@ dev/servidor.mjs
 dev/generar-invitados.mjs
 dev/apps-script/
 .claude/
+
+# Carpeta generada por build.sh
+public/
